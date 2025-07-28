@@ -1,0 +1,68 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - ia-network
+
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    networks:
+      - ia-network
+    restart: unless-stopped
+
+  rag-server:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile.python
+    container_name: rag-server
+    ports:
+      - "5000:5000"
+    networks:
+      - ia-network
+    restart: unless-stopped
+
+  springboot-api:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile.java
+    container_name: springboot-api
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:${POSTGRES_PORT:-5432}/${POSTGRES_DB}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+
+      - SPRING_SECURITY_JWT_PASSWORD=${JWT_SECRET}
+      - SPRING_SECURITY_JWT_ISSUER=${JWT_ISSUER}
+      - SPRING_SECURITY_JWT_EXPIRATION_HOURS=${JWT_EXPIRATION_HOURS}
+
+      - RAG_API_URL=http://rag-server:5000/question
+    depends_on:
+      - postgres
+      - ollama
+      - rag-server
+    networks:
+      - ia-network
+
+volumes:
+  postgres-data:
+  ollama-data:
+
+networks:
+  ia-network:
+    driver: bridge
