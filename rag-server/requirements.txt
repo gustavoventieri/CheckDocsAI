@@ -1,12 +1,5 @@
 fastapi
-uvicorn[standard]
-llama-index==0.12.52
+uvicorn
+llama-index
 llama-index-llms-ollama
 llama-index-embeddings-huggingface
-llama-index-vector-stores-faiss
-faiss-gpu
-transformers
-huggingface_hub
-torch
-httpx
-numpy>=1.24,<2

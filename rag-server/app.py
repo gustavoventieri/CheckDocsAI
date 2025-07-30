@@ -1,13 +1,24 @@
-from flask import Flask, request, jsonify
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings
 from llama_index.llms.ollama import Ollama
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
-import asyncio
+import torch
+import uvicorn
 
-app = Flask(__name__)
+app = FastAPI()
 
-# Configura embeddings e LLM
-Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-base-en-v1.5")
+# Detecta se a GPU está disponível
+device = "cuda" if torch.cuda.is_available() else "cpu"
+
+# Configuração do modelo de embedding com uso de GPU
+Settings.embed_model = HuggingFaceEmbedding(
+    model_name="BAAI/bge-base-en-v1.5",
+    device=device
+)
+print(device)
+
+# Configuração do LLM Ollama
 Settings.llm = Ollama(
     model="llama3.2",
     base_url="http://ollama:11434",
@@ -20,21 +31,15 @@ documents = SimpleDirectoryReader("./data").load_data()
 index = VectorStoreIndex.from_documents(documents)
 query_engine = index.as_query_engine()
 
-@app.route("/question", methods=["POST"])
-def ask():
-    data = request.json
-    pergunta = data.get("question")
-    if not pergunta:
-        return jsonify({"error": "Campo 'question' é obrigatório"}), 400
+# Modelo da requisição
+class QuestionRequest(BaseModel):
+    question: str
 
+@app.post("/question")
+async def ask_question(request: QuestionRequest):
     try:
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        resposta = loop.run_until_complete(query_engine.aquery(pergunta))
-        loop.close()
-        return jsonify({"response": str(resposta)})
+        response = await query_engine.aquery(request.question)
+        return {"response": str(response)}
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
