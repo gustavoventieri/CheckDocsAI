@@ -1,2 +1,0 @@
-Inteligência Artificial (IA) é um campo da ciência da computação que foca na criação de sistemas capazes de realizar tarefas que normalmente requerem inteligência humana, como reconhecimento de fala, visão computacional e tomada de decisão.
-Modelos de linguagem, como GPT, são exemplos recentes de IA aplicada.
