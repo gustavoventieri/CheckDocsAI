@@ -1,14 +1,13 @@
-import { useState } from "react";
+import { BrowserRouter } from "react-router-dom";
+import { AppRoutes } from "./routes";
+import { AppThemeProvider } from "./shared/context/ThemeContext";
 
-function App() {
-  const [count, setCount] = useState(0);
-
+export const App = () => {
   return (
-    <>
-      <button onClick={() => setCount(count + 1)}>click me</button>
-      <button onClick={() => console.log(count)}>show count</button>
-    </>
+    <AppThemeProvider>
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+    </AppThemeProvider>
   );
-}
-
-export default App;
+};
