@@ -24,6 +24,7 @@ Settings.llm = Ollama(
     base_url="http://ollama:11434",
     request_timeout=360.0,
     context_window=8000,
+    temparature=0.2
 )
 
 # Carrega documentos e cria índice
