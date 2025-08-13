@@ -88,8 +88,8 @@ A verificação manual de documentos é um processo **lento, sujeito a erros e c
 ### 1. Clone o repositório
 
 ```bash
-git clone https://github.com/seu-usuario/check-docs-ai.git
-cd check-docs-ai
+git clone https://github.com/gustavoventieri/CheckDocsAI.git
+cd CheckDocsAI
 ```
 
 ### 2. Suba os containers com Docker
@@ -126,11 +126,3 @@ http://localhost:8080/swagger/api-docs
 ---
 
 > 💡 Com o **Check Docs AI**, a análise documental se torna mais rápida, segura e inteligente, economizando tempo e reduzindo erros.
-
-```
-
-```
-
-```
-
-```
