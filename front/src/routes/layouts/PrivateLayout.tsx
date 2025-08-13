@@ -37,5 +37,5 @@ export const PrivateAppLayout = () => {
     );
   }
 
-  return authenticated ? <Outlet /> : <Navigate to="/login" />;
+  return authenticated ? <Outlet /> : <Navigate to="/" />;
 };

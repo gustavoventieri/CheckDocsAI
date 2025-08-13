@@ -1,31 +1,31 @@
 import { createTheme } from "@mui/material";
-import { grey } from "@mui/material/colors";
 
 export const DarkTheme = createTheme({
   palette: {
     mode: "dark",
     primary: {
       main: "#0A7BFF",
-      light: "#5AAEFF", // Versão clara
-      dark: "#005FCC", // Versão escura
+      light: "#5AAEFF",
+      dark: "#005FCC",
       contrastText: "#ffffff",
     },
     secondary: {
-      main: "#009688", // Verde-azulado (moderno)
-      dark: "#00695C",
-      light: "#4DB6AC",
+      main: "#757575",
+      light: "#AFAFAF",
+      dark: "#494949",
       contrastText: "#ffffff",
     },
     background: {
-      paper: "#121416", // quase preto
-      default: "#1A1D21", // grafite profundo
+      default: "#121212", // cinza quase preto, confortável para o fundo principal
+      paper: "#1E1E1E", // cinza escuro mais suave para superfícies
     },
     text: {
-      primary: grey[100],
-      secondary: grey[400],
+      primary: "#E0E0E0",
+      secondary: "#B0B0B0",
+      disabled: "#7A7A7A",
     },
     error: {
-      main: "#FF7043", // Laranja queimado como alerta
+      main: "#FF7043",
     },
   },
 });

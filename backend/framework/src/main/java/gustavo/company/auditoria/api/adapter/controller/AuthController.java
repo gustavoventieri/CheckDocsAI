@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import gustavo.company.auditoria.api.adapter.dto.request.auth.LoginRequestImpl;
-import gustavo.company.auditoria.api.adapter.dto.request.auth.RegisterRequestImpl;
+import gustavo.company.auditoria.api.adapter.dto.request.auth.LoginRequestDTO;
+import gustavo.company.auditoria.api.adapter.dto.request.auth.RegisterRequestDTO;
 import gustavo.company.service.AuthService;
 import gustavo.company.utils.JWTUtils;
 import jakarta.servlet.http.Cookie;
@@ -46,7 +46,7 @@ public class AuthController {
      * @return HTTP response with success message.
      */
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody @Valid LoginRequestImpl loginRequestImpl,
+    public ResponseEntity<String> login(@RequestBody @Valid LoginRequestDTO loginRequestImpl,
             HttpServletResponse response) {
         log.info("Login attempt for email: {}", loginRequestImpl.email());
 
@@ -90,7 +90,7 @@ public class AuthController {
      * @return HTTP response with success message.
      */
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody @Valid RegisterRequestImpl registerRequestImpl,
+    public ResponseEntity<String> register(@RequestBody @Valid RegisterRequestDTO registerRequestImpl,
             HttpServletResponse response) {
         log.info("Registration attempt for email: {}", registerRequestImpl.email());
 

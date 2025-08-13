@@ -38,8 +38,8 @@ public class UserRepositoryImpl implements UserRepository {
     public UserDomain save(final UserDomain user) {
         log.debug("Saving user: {}", user);
         try {
-            final User userSaved = userRepositoryOrm.save(UserMapper.toEntity(user));
-            return UserMapper.toDomain(userSaved);
+            final User userSaved = userRepositoryOrm.save(UserMapper.toEntityComplete(user));
+            return UserMapper.toDomainBasic(userSaved);
         } catch (DataIntegrityViolationException e) {
             log.error("Conflict while saving user: {}", user, e);
             throw new Conflict("Conflict detected while saving user", e);
@@ -65,7 +65,7 @@ public class UserRepositoryImpl implements UserRepository {
         log.debug("Searching for user by email: {}", email);
         try {
             final Optional<User> userOpt = userRepositoryOrm.findByEmail(email);
-            return userOpt.map(UserMapper::toDomain);
+            return userOpt.map(UserMapper::toDomainBasic);
         } catch (IllegalArgumentException e) {
             log.error("Invalid email provided: {}", email, e);
             throw new BadRequest("Invalid email provided", e);
@@ -88,7 +88,7 @@ public class UserRepositoryImpl implements UserRepository {
         log.debug("Searching for user by name: {}", name);
         try {
             final Optional<User> userOpt = userRepositoryOrm.findByName(name);
-            return userOpt.map(UserMapper::toDomain);
+            return userOpt.map(UserMapper::toDomainBasic);
         } catch (IllegalArgumentException e) {
             log.error("Invalid name provided: {}", name, e);
             throw new BadRequest("Invalid name provided", e);
@@ -111,7 +111,7 @@ public class UserRepositoryImpl implements UserRepository {
         log.debug("Searching for user by ID: {}", userId);
         try {
             final Optional<User> userOpt = userRepositoryOrm.findById(userId);
-            return userOpt.map(UserMapper::toDomain);
+            return userOpt.map(UserMapper::toDomainBasic);
         } catch (IllegalArgumentException e) {
             log.error("Invalid ID provided: {}", userId, e);
             throw new BadRequest("Invalid user ID provided", e);

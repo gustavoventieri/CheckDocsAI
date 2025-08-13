@@ -72,7 +72,7 @@ public class AuthServiceImpl implements AuthService {
                 passwordEncoder.encode(password),
                 LocalDateTime.now());
 
-        final UserDomain savedUser = userRepository.save(UserMapper.toDomain(user));
+        final UserDomain savedUser = userRepository.save(UserMapper.toDomainComplete(user));
 
         final String token = generateToken(savedUser);
         log.info("Registration successful for email: {}", email);

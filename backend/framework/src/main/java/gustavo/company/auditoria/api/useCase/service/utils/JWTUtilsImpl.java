@@ -1,4 +1,4 @@
-package gustavo.company.auditoria.api.useCase.utils;
+package gustavo.company.auditoria.api.useCase.service.utils;
 
 
 

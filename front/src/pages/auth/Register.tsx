@@ -1,9 +1,24 @@
-import { Box, Button, Link, Paper, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  IconButton,
+  InputAdornment,
+  Link,
+  Paper,
+  TextField,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useState } from "react";
+import { api } from "../../shared/services/api/config/axios.config";
+import { useNavigate } from "react-router-dom";
 
-// Schema de validação com campo de confirmação de senha
 const schema = yup
   .object({
     name: yup.string().required("Nome é obrigatório"),
@@ -19,7 +34,6 @@ const schema = yup
   })
   .required();
 
-// Tipagem dos dados do formulário
 type FormData = yup.InferType<typeof schema>;
 
 export const Register = () => {
@@ -31,72 +45,197 @@ export const Register = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data: FormData) => {
-    console.log("Register:", data);
-    // Aqui você pode enviar os dados para a API
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  const navigate = useNavigate();
+  const theme = useTheme();
+  const isMdDown = useMediaQuery(theme.breakpoints.down("md"));
+
+  const onSubmit = async (data: FormData) => {
+    setIsLoading(true);
+    try {
+      const response = await api.post("/auth/register", data);
+      if (response.status === 200) {
+        navigate("/chat");
+      }
+    } catch (error) {
+      console.error("Erro ao registrar:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <Box
       sx={{
         height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
+        backgroundColor: theme.palette.background.default,
       }}
     >
-      <Paper elevation={3} sx={{ padding: 4, width: 350 }}>
-        <Typography variant="h5" align="center" gutterBottom>
-          Registrar
-        </Typography>
+      <Grid container sx={{ height: "100%" }}>
+        {/* Coluna Esquerda (Formulário) */}
+        <Grid
+          size={{ xs: 12, md: 8 }}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            p: 4,
+          }}
+        >
+          <Paper
+            elevation={isMdDown ? 0 : 3}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              width: "100%",
+              maxWidth: 500,
+              height: 600,
+              p: isMdDown ? 1 : 4,
+              justifyContent: "center",
+              borderRadius: 3,
+              bgcolor: isMdDown ? "transparent" : undefined,
+              boxShadow: isMdDown ? "none" : undefined,
+            }}
+          >
+            <Typography variant="h5" align="center" gutterBottom>
+              Crie sua conta!
+            </Typography>
 
-        <form onSubmit={handleSubmit(onSubmit)} noValidate>
-          <TextField
-            fullWidth
-            label="Nome"
-            {...register("name")}
-            margin="normal"
-            error={!!errors.name}
-            helperText={errors.name?.message}
-          />
-          <TextField
-            fullWidth
-            label="Email"
-            type="email"
-            {...register("email")}
-            margin="normal"
-            error={!!errors.email}
-            helperText={errors.email?.message}
-          />
-          <TextField
-            fullWidth
-            label="Senha"
-            type="password"
-            {...register("password")}
-            margin="normal"
-            error={!!errors.password}
-            helperText={errors.password?.message}
-          />
-          <TextField
-            fullWidth
-            label="Confirmar Senha"
-            type="password"
-            {...register("confirmPassword")}
-            margin="normal"
-            error={!!errors.confirmPassword}
-            helperText={errors.confirmPassword?.message}
-          />
-          <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
-            Registrar
-          </Button>
-        </form>
+            <form onSubmit={handleSubmit(onSubmit)} noValidate>
+              <TextField
+                fullWidth
+                label="Nome"
+                {...register("name")}
+                margin="normal"
+                error={!!errors.name}
+                helperText={errors.name?.message}
+              />
 
-        <Box mt={2} textAlign="center">
-          <Link href="/login" underline="hover">
-            Já tem uma conta? Faça login
-          </Link>
-        </Box>
-      </Paper>
+              <TextField
+                fullWidth
+                label="Email"
+                type="email"
+                {...register("email")}
+                margin="normal"
+                error={!!errors.email}
+                helperText={errors.email?.message}
+              />
+
+              <TextField
+                fullWidth
+                label="Senha"
+                type={showPassword ? "text" : "password"}
+                {...register("password")}
+                margin="normal"
+                error={!!errors.password}
+                helperText={errors.password?.message}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowPassword((prev) => !prev)}
+                        edge="end"
+                        sx={{ mr: 0 }}
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+
+              <TextField
+                fullWidth
+                label="Confirmar Senha"
+                type={showConfirm ? "text" : "password"}
+                {...register("confirmPassword")}
+                margin="normal"
+                error={!!errors.confirmPassword}
+                helperText={errors.confirmPassword?.message}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowConfirm((prev) => !prev)}
+                        edge="end"
+                        sx={{ mr: 0 }}
+                      >
+                        {showConfirm ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+
+              <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                sx={{ mt: 3, pt: 1.5 }}
+                disabled={isLoading}
+              >
+                {isLoading ? "Criando conta..." : "Cadastrar"}
+              </Button>
+            </form>
+
+            <Box mt={2}>
+              <Typography>
+                Já tem uma conta?{" "}
+                <Link href="/login" underline="hover">
+                  Clique aqui
+                </Link>
+              </Typography>
+            </Box>
+          </Paper>
+        </Grid>
+
+        {/* Coluna Direita (Ilustração) */}
+        {!isMdDown && (
+          <Grid
+            size={{ xs: 12, md: 4 }}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              bgcolor: "primary.main",
+              color: "#fff",
+              p: 4,
+            }}
+          >
+            <Box textAlign="center">
+              <Box
+                sx={{
+                  bgcolor: "#fff",
+                  color: "primary.main",
+                  width: 55,
+                  height: 55,
+                  borderRadius: "12px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  fontWeight: "bold",
+                  fontSize: 30,
+                  userSelect: "none",
+                  mx: "auto",
+                  mb: 2,
+                  pt: 1.2,
+                }}
+              >
+                AI
+              </Box>
+              <Typography variant="h4" fontWeight="bold">
+                Check Docs
+              </Typography>
+              <Typography variant="subtitle1" mt={1}>
+                Cadastre-se e aproveite o poder da IA na documentação.
+              </Typography>
+            </Box>
+          </Grid>
+        )}
+      </Grid>
     </Box>
   );
 };
