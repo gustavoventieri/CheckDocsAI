@@ -96,7 +96,7 @@ export const ChatBot = () => {
     setLoading(true);
 
     try {
-      const response = await api.post("/chat-bot/question", {
+      const response = await api.post("/chat-bot/ask/agent", {
         message: userMessage.message,
       });
 
