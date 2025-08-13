@@ -1,8 +1,11 @@
 # 📄 Check Docs AI
 
-**Check Docs AI** é uma plataforma **inteligente** e **moderna** para análise e verificação de documentos, utilizando **IA generativa** com **RAG (Retrieval-Augmented Generation)** para garantir respostas **contextuais**, **precisas** e **confiáveis**.
+Check Docs AI é uma plataforma inteligente e moderna para análise e verificação de documentos, utilizando IA generativa com RAG (Retrieval-Augmented Generation) para garantir respostas contextuais, precisas e confiáveis.
+O sistema combina automação, processamento de linguagem natural e arquitetura modular, oferecendo uma solução escalável para empresas, escritórios jurídicos, instituições acadêmicas e órgãos corporativos que necessitam validar informações rapidamente.
 
-O sistema combina **automação**, **processamento de linguagem natural** e **arquitetura modular**, oferecendo uma solução escalável para **empresas, escritórios jurídicos, instituições acadêmicas e órgãos corporativos** que necessitam validar informações rapidamente.
+O projeto nasce da necessidade de um fluxo de verificação seguro, customizável e integrável, eliminando a dependência de soluções fechadas. A combinação de Java + Spring Boot para a API principal, Python + FastAPI + LangChain para o servidor RAG e React + MUI para a interface garante alta performance, flexibilidade e usabilidade.
+
+Ideal para ambientes onde a precisão na análise documental é crítica, o Check Docs AI se torna a base perfeita para construir sistemas de validação documental robustos e de nível empresarial. 
 
 ---
 
@@ -58,7 +61,7 @@ A verificação manual de documentos é um processo **lento, sujeito a erros e c
 ### 🧠 Servidor RAG
 
 <p align="left">
-  <img src="https://skillicons.dev/icons?i=python,fastapi" />
+  <img src="https://skillicons.dev/icons?i=python,fastapi,docker" />
 </p>
 
 - **Python** • Flexibilidade para IA e processamento de dados
@@ -88,6 +91,7 @@ A verificação manual de documentos é um processo **lento, sujeito a erros e c
 git clone https://github.com/seu-usuario/check-docs-ai.git
 cd check-docs-ai
 ```
+
 ````
 
 ### 2. Suba os containers com Docker
@@ -121,3 +125,4 @@ http://localhost:8080/swagger/api-docs
 ```
 
 ```
+````
