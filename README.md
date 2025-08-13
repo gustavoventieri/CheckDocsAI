@@ -5,7 +5,7 @@ O sistema combina automação, processamento de linguagem natural e arquitetura 
 
 O projeto nasce da necessidade de um fluxo de verificação seguro, customizável e integrável, eliminando a dependência de soluções fechadas. A combinação de Java + Spring Boot para a API principal, Python + FastAPI + LangChain para o servidor RAG e React + MUI para a interface garante alta performance, flexibilidade e usabilidade.
 
-Ideal para ambientes onde a precisão na análise documental é crítica, o Check Docs AI se torna a base perfeita para construir sistemas de validação documental robustos e de nível empresarial. 
+Ideal para ambientes onde a precisão na análise documental é crítica, o Check Docs AI se torna a base perfeita para construir sistemas de validação documental robustos e de nível empresarial.
 
 ---
 
@@ -92,8 +92,6 @@ git clone https://github.com/seu-usuario/check-docs-ai.git
 cd check-docs-ai
 ```
 
-````
-
 ### 2. Suba os containers com Docker
 
 ```bash
@@ -102,11 +100,18 @@ docker-compose up --build
 
 > Isso iniciará a API Java + Spring, o servidor RAG em Python e o front-end React, junto ao banco PostgreSQL.
 
-### 3. Acesse o projeto
+### 3. Baixe o modelo do agente
+
+```bash
+docker exec -it ollama ollama pull modelName
+```
+
+> Isso baixará o modelo do agente do site do ollama
+
+### 4. Acesse o projeto
 
 - Front-end: `http://localhost:5173`
 - API (Swagger): `http://localhost:8080/swagger/api-docs`
-- Servidor RAG: `http://localhost:8000/docs`
 
 ---
 
@@ -125,4 +130,7 @@ http://localhost:8080/swagger/api-docs
 ```
 
 ```
-````
+
+```
+
+```
