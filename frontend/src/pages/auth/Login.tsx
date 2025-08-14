@@ -26,7 +26,7 @@ const schema = yup
     email: yup.string().email("Email inválido").required("Email é obrigatório"),
     password: yup
       .string()
-      .min(6, "A senha deve ter pelo menos 6 caracteres")
+      .min(8, "A senha deve ter pelo menos 8 caracteres")
       .required("Senha é obrigatória"),
   })
   .required();
@@ -123,9 +123,7 @@ export const Login = () => {
                   userSelect: "none",
                   mx: "auto",
                   mb: 2,
-                  pt: 1.2,
                 }}
-                
               >
                 AI
               </Box>
@@ -214,7 +212,7 @@ export const Login = () => {
               </Button>
             </form>
 
-            <Box mt={2}>
+            <Box>
               <Typography>
                 Não tem uma conta?{" "}
                 <Link href="/register" underline="hover">

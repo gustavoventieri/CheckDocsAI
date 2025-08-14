@@ -10,6 +10,8 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
@@ -25,7 +27,7 @@ const schema = yup
     email: yup.string().email("Email inválido").required("Email é obrigatório"),
     password: yup
       .string()
-      .min(6, "A senha deve ter pelo menos 6 caracteres")
+      .min(8, "A senha deve ter pelo menos 6 caracteres")
       .required("Senha é obrigatória"),
     confirmPassword: yup
       .string()
@@ -48,10 +50,16 @@ export const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(""); // Mensagem do Snackbar
+  const [openSnackbar, setOpenSnackbar] = useState(false); // Controle do Snackbar
 
   const navigate = useNavigate();
   const theme = useTheme();
   const isMdDown = useMediaQuery(theme.breakpoints.down("md"));
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
 
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
@@ -60,8 +68,14 @@ export const Register = () => {
       if (response.status === 200) {
         navigate("/chat");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Erro ao registrar:", error);
+      // Pega a mensagem do erro, caso exista
+      const msg =
+        error.response?.data?.message ||
+        "Ocorreu um erro ao registrar. Tente novamente.";
+      setErrorMessage(msg);
+      setOpenSnackbar(true);
     } finally {
       setIsLoading(false);
     }
@@ -184,7 +198,7 @@ export const Register = () => {
             <Box mt={2}>
               <Typography>
                 Já tem uma conta?{" "}
-                <Link href="/login" underline="hover">
+                <Link href="/" underline="hover">
                   Clique aqui
                 </Link>
               </Typography>
@@ -221,7 +235,6 @@ export const Register = () => {
                   userSelect: "none",
                   mx: "auto",
                   mb: 2,
-                  pt: 1.2,
                 }}
               >
                 AI
@@ -236,6 +249,22 @@ export const Register = () => {
           </Grid>
         )}
       </Grid>
+
+      {/* Snackbar de erro */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

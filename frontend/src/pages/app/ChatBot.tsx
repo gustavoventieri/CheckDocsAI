@@ -132,7 +132,7 @@ export const ChatBot = () => {
 
   const handleLogout = () => {
     Cookies.remove("token");
-    navigate("/login");
+    navigate("/");
   };
 
   return (
